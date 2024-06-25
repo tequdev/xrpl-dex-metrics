@@ -2,11 +2,12 @@ type Props = {
   title: string
   value: string
   desc: string
+  shadow?: boolean
 }
 
-export const Stats: React.FC<Props> = ({ title, value, desc }) => {
+export const Stats: React.FC<Props> = ({ title, value, desc, shadow = false }) => {
   return (
-    <div className="stats w-full">
+    <div className={`stats w-full ${shadow ? 'shadow': ''}`}>
       <div className="stat">
         <div className="stat-title">{title}</div>
         <div className="stat-value">{value}</div>

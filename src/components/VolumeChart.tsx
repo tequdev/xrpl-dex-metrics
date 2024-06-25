@@ -48,9 +48,10 @@ export const VolumeChart = () => {
 
   return (
     <div>
-      <Stats title="Total Volume (24h, OrderBook+AMM)" value={`${volume24h.toLocaleString()} XRP`} desc="Only XRP pair" />
+      <Stats shadow title="Total Volume (24h, OrderBook+AMM)" value={`${volume24h.toLocaleString()} XRP`} desc="Only XRP pair" />
+      <hr className='my-8' />
+      <Stats title="" value='Total Volume' desc="Only XRP pair" />
       <BarChart width={640} height={300} data={data} margin={{ top: 5, right: 20, bottom: -30, left: 35 }}>
-        {/* <Bar type="monotone" dataKey="amt" stroke="#8884d8" /> */}
         <Bar type="monotone" dataKey="amm" name="AMM" stackId="a" fill="#8884d8" />
         <Bar type="monotone" dataKey="orderbook" name="OrderBook" stackId="a" fill="#82ca9d" />
         <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />

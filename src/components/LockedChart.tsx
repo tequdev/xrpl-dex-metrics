@@ -30,9 +30,14 @@ export const LockedChart = () => {
       }))
   }, [_data])
 
+  const lockedAmtStr = data.length > 0 ? (data[data.length - 1].amt).toLocaleString() : '0'
+  const lockedXRPStr = data.length > 0 ? (data[data.length - 1].amtXrp).toLocaleString() : '0'
+
   return (
     <div>
-      <Stats title="Total Value Locked" value={`${data.length > 0 ? (data[data.length - 1].amt).toLocaleString() : '0'} XRP equ.`} desc={`${data.length > 0 ? data[data.length - 1].amtXrp.toLocaleString() : '0'} XRP`} />
+      <Stats shadow title="Total Value Locked" value={`${lockedAmtStr} XRP equ.`} desc={`${lockedXRPStr} XRP + ${lockedXRPStr} XRP equ. tokens`} />
+      <hr className='my-8' />
+      <Stats title="" value='Total Value Locked' desc='for XRP pair' />
       <BarChart width={640} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 35 }}>
         <Bar type="monotone" dataKey="amt" fill="#82ca9d" color="#82ca9d" />
         <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
