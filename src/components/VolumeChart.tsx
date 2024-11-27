@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 import { BarChart, Bar, CartesianGrid, Legend, XAxis, YAxis, Tooltip } from 'recharts';
 import useSWR from 'swr/immutable'
-import { dateFormatter } from '../utils';
+import { apiBaseUrl, dateFormatter, nativeToken } from '../utils';
 import { Stats } from './Stats';
+import { Network } from '../types';
 
 type APIResponse = {
   "timestamp": string //"2024-06-25T00:00:00.000Z",
@@ -13,10 +14,10 @@ type APIResponse = {
 
 const fetcher = (url: string) => fetch(url).then(res => res.json())
 
-export const VolumeChart = () => {
-  const { data: chartDataAMM } = useSWR<APIResponse>("https://data.xrplf.org/v1/iou/volume_data/XRP?interval=1d&exclude_amm=true&only_amm=false&descending=true&limit=90", fetcher)
-  const { data: chartDataOB } = useSWR<APIResponse>("https://data.xrplf.org/v1/iou/volume_data/XRP?interval=1d&exclude_amm=false&only_amm=true&descending=true&limit=90", fetcher)
-  const { data: volumeData } = useSWR<APIResponse>("https://data.xrplf.org/v1/iou/volume_data/XRP?interval=15m&exclude_amm=false&only_amm=false&descending=true&skip=0&limit=96", fetcher)
+export const VolumeChart = ({ network }: { network: Network }) => {
+  const { data: chartDataAMM } = useSWR<APIResponse>(`${apiBaseUrl(network)}/v1/iou/volume_data/${nativeToken(network)}?interval=1d&exclude_amm=true&only_amm=false&descending=true&limit=90`, fetcher,)
+  const { data: chartDataOB } = useSWR<APIResponse>(`${apiBaseUrl(network)}/v1/iou/volume_data/${nativeToken(network)}?interval=1d&exclude_amm=false&only_amm=true&descending=true&limit=90`, fetcher)
+  const { data: volumeData } = useSWR<APIResponse>(`${apiBaseUrl(network)}/v1/iou/volume_data/${nativeToken(network)}?interval=15m&exclude_amm=false&only_amm=false&descending=true&skip=0&limit=96`, fetcher)
 
   const data = useMemo(() => {
     if (!chartDataAMM || !chartDataOB) return []
@@ -26,7 +27,7 @@ export const VolumeChart = () => {
       const obVolume = chartDataOB[i].volume
       return {
         timestamp: item.timestamp,
-        amm: item.volume,
+        amm: network === 'xrpl' ? item.volume : 0,
         orderbook: obVolume,
         volume: item.volume + obVolume
       }
@@ -39,7 +40,7 @@ export const VolumeChart = () => {
         amm: parseInt(amm.toString()),
         orderbook: parseInt(orderbook.toString())
       }))
-  }, [chartDataAMM, chartDataOB])
+  }, [chartDataAMM, chartDataOB, network])
   
   const volume24h = useMemo(() => {
     if (!volumeData) return 0
@@ -48,16 +49,18 @@ export const VolumeChart = () => {
 
   return (
     <div>
-      <Stats shadow title="Total Volume (24h, OrderBook+AMM)" value={`${volume24h.toLocaleString()} XRP`} desc="Only XRP pair" />
+      <Stats shadow title={`Total Volume (24h, OrderBook${network === 'xrpl' ? '+AMM' : ''})`} value={`${volume24h.toLocaleString()} ${nativeToken(network)}`} desc={`Only ${nativeToken(network)} pair`} />
       <hr className='my-8' />
-      <Stats title="" value='Total Volume' desc="Only XRP pair" />
+      <Stats title="" value='Total Volume' desc={`Only ${nativeToken(network)} pair`} />
       <BarChart width={640} height={300} data={data} margin={{ top: 5, right: 20, bottom: -30, left: 35 }}>
-        <Bar type="monotone" dataKey="amm" name="AMM" stackId="a" fill="#8884d8" />
+        {network === 'xrpl' &&
+          <Bar type="monotone" dataKey="amm" name="AMM" stackId="a" fill="#8884d8" />
+        }
         <Bar type="monotone" dataKey="orderbook" name="OrderBook" stackId="a" fill="#82ca9d" />
         <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
         <XAxis dataKey="date" />
         <YAxis dataKey="amt" tickFormatter={(v) => v.toLocaleString()} />
-        <Tooltip formatter={(value, name) => [`${name}: ${value.toLocaleString()}XRP`]} />
+        <Tooltip formatter={(value, name) => [`${name}: ${value.toLocaleString()}${nativeToken(network)}`]} />
       <Legend verticalAlign="bottom" height={36}/>
       </BarChart>
     </div>

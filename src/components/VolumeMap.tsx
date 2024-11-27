@@ -2,7 +2,8 @@ import { useMemo } from 'react';
 import { Treemap } from 'recharts';
 import useSWR from 'swr/immutable'
 import { Stats } from './Stats';
-import { parseCurrency } from '../utils';
+import { apiBaseUrl, nativeToken, parseCurrency } from '../utils';
+import { Network } from '../types';
 
 type APIResponse = {
   "date_from": string
@@ -21,8 +22,8 @@ type APIResponse = {
 
 const fetcher = (url: string) => fetch(url).then(res => res.json())
 
-export const VolumeMap = () => {
-  const { data: _data } = useSWR<APIResponse>("https://data.xrplf.org/v1/iou/ticker_data/XRP?interval=1d&exclude_amm=false&only_amm=false", fetcher)
+export const VolumeMap = ({ network }: { network: Network }) => {
+  const { data: _data } = useSWR<APIResponse>(`${apiBaseUrl(network)}/v1/iou/ticker_data/${nativeToken(network)}?interval=1d&exclude_amm=false&only_amm=false`, fetcher)
 
   const data = useMemo(() => {
     if (!_data) return []
