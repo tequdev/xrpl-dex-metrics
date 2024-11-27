@@ -37,7 +37,7 @@ export const VolumeMap = ({ network }: { network: Network }) => {
 
   return (
     <div>
-      <Stats value='Volume Map' title='' desc='for XRP pair' />
+      <Stats value='Volume Map' title='' desc={`for ${nativeToken(network)} pair`} />
       <Treemap
         width={1280}
         height={500}
