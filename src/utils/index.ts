@@ -1,7 +1,21 @@
 import { Network } from "../types";
 
-export const dateFormatter = (date:string) => {
+export const dateFormatter = (date:string | number) => {
   return new Date(date).toLocaleDateString();
+}
+
+export const timeFormatter = (datetime: string | number) => {
+  return new Date(datetime).toLocaleTimeString();
+}
+
+export const valueToString = (value: number) => {
+  const suffixes = ["", "K", "M", "B", "T"];
+  const suffixNum = Math.floor(("" + value).length / 3);
+  let shortValue = String(parseFloat((suffixNum != 0 ? (value / Math.pow(1000, suffixNum)) : value).toPrecision(2)));
+  if (Number(shortValue) % 1 != 0) {
+    shortValue = Number(shortValue).toFixed(1);
+  }
+  return shortValue + suffixes[suffixNum];
 }
 
 export const parseCurrency = (currency: string) => {
