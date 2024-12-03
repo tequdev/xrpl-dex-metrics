@@ -23,7 +23,7 @@ type APIResponse = {
 const fetcher = (url: string) => fetch(url).then(res => res.json())
 
 export const VolumeMap = ({ network }: { network: Network }) => {
-  const { data: _data } = useSWR<APIResponse>(`${apiBaseUrl(network)}/v1/iou/ticker_data/${nativeToken(network)}?interval=1d&exclude_amm=false&only_amm=false`, fetcher)
+  const { data: _data } = useSWR<APIResponse>(`${apiBaseUrl(network)}/v1/iou/ticker_data/${nativeToken(network)}?interval=1d&exclude_amm=false&only_amm=false&min_exchanges=1`, fetcher)
 
   const data = useMemo(() => {
     if (!_data) return []
@@ -45,6 +45,7 @@ export const VolumeMap = ({ network }: { network: Network }) => {
         dataKey="size"
         aspectRatio={4 / 3}
         stroke="#fff"
+        isAnimationActive={false}
         fill="#82ca9d"
       />
     </div>

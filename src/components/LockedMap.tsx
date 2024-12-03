@@ -42,6 +42,7 @@ export const LockedMap = () => {
         dataKey="size"
         aspectRatio={4 / 3}
         stroke="#fff"
+        isAnimationActive={false}
         fill="#82ca9d"
       />
     </div>
