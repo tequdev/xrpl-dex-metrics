@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Treemap } from 'recharts';
+import { Tooltip, Treemap } from 'recharts';
 import useSWR from 'swr/immutable'
 import { Stats } from './Stats';
 import { parseCurrency } from '../utils';
@@ -18,7 +18,7 @@ type APIResponse = {
 
 const fetcher = (url: string) => fetch(url).then(res => res.json())
 
-export const LockedMap = () => {
+export const LockedMap = ({ base }: { base: string }) => {
   const { data: _data } = useSWR<APIResponse>("https://api.xrpscan.com/api/v1/amm/pools", fetcher)
 
   const data = useMemo(() => {
@@ -44,7 +44,9 @@ export const LockedMap = () => {
         stroke="#fff"
         isAnimationActive={false}
         fill="#82ca9d"
-      />
+      >
+        <Tooltip formatter={(value) => [`${value.toLocaleString()}${base}`]} />
+      </Treemap>
     </div>
   )
 };

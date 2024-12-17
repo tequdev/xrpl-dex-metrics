@@ -71,8 +71,8 @@ function App() {
         <VolumeChart base={base} network={network} yearPrices={yearPrices} dailyPrices={dailyPrices} />
         <LockedChart base={base} network={network} yearPrices={yearPrices} />
       </div>
-      <VolumeMap network={network} />
-      {network === 'xrpl' && <LockedMap />}
+      <VolumeMap base={base} network={network} />
+      {network === 'xrpl' && <LockedMap base={base} />}
     </>
   )
 }

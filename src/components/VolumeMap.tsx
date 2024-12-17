@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Treemap } from 'recharts';
+import { Tooltip, Treemap } from 'recharts';
 import useSWR from 'swr/immutable'
 import { Stats } from './Stats';
 import { apiBaseUrl, nativeToken, parseCurrency } from '../utils';
@@ -22,7 +22,7 @@ type APIResponse = {
 
 const fetcher = (url: string) => fetch(url).then(res => res.json())
 
-export const VolumeMap = ({ network }: { network: Network }) => {
+export const VolumeMap = ({ base, network }: { base: string, network: Network }) => {
   const { data: _data } = useSWR<APIResponse>(`${apiBaseUrl(network)}/v1/iou/ticker_data/${nativeToken(network)}?interval=1d&exclude_amm=false&only_amm=false&min_exchanges=1`, fetcher)
 
   const data = useMemo(() => {
@@ -47,7 +47,9 @@ export const VolumeMap = ({ network }: { network: Network }) => {
         stroke="#fff"
         isAnimationActive={false}
         fill="#82ca9d"
-      />
+      >
+        <Tooltip formatter={(value) => [`${value.toLocaleString()}${base}`]} />
+      </Treemap>
     </div>
   )
 };
