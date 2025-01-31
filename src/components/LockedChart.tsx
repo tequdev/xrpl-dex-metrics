@@ -28,7 +28,7 @@ export const LockedChart = ({ base, network, yearPrices }: { base: string, netwo
       .map(({ date, amm }) => ({
         date: dateFormatter(date),
         amt: Math.round((amm.xrp_locked * 2) * (yearPrices[dateFormatter(date)] ?? 1)),
-        amtXrp: Math.round(amm.xrp_locked * (yearPrices[dateFormatter(date)] ?? 1))
+        amtXrp: Math.round(amm.xrp_locked * (1))
       }))
   }, [_data, network, yearPrices])
 
