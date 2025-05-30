@@ -26,5 +26,5 @@ export const parseCurrency = (currency: string) => {
   return str;
 }
 
-export const apiBaseUrl = (network: Network) => network === 'xrpl' ? 'https://data.xrplf.org' : 'https://data.xahau.network'
+export const apiBaseUrl = (network: Network) => network === 'xrpl' ? 'https://xrpldata.inftf.org' : 'https://data.xahau.network'
 export const nativeToken = (network: Network) => network === 'xrpl' ? 'XRP' : 'XAH'
