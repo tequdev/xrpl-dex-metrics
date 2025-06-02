@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Tooltip, Treemap } from 'recharts';
+import { Tooltip, Treemap, ResponsiveContainer } from 'recharts';
 import useSWR from 'swr/immutable'
 import { Stats } from './Stats';
 import { parseCurrency } from '../utils';
@@ -35,18 +35,18 @@ export const LockedMap = ({ base }: { base: string }) => {
   return (
     <div>
       <Stats value='Locked Map' title='' desc='for XRP pair pool' />
-      <Treemap
-        width={1280}
-        height={500}
-        data={data}
-        dataKey="size"
-        aspectRatio={4 / 3}
-        stroke="#fff"
-        isAnimationActive={false}
-        fill="#82ca9d"
-      >
-        <Tooltip formatter={(value) => [`${value.toLocaleString()}${base}`]} />
-      </Treemap>
+      <ResponsiveContainer width="100%" height={500}>
+        <Treemap
+          data={data}
+          dataKey="size"
+          aspectRatio={4 / 3}
+          stroke="#fff"
+          isAnimationActive={false}
+          fill="#82ca9d"
+        >
+          <Tooltip formatter={(value) => [`${value.toLocaleString()}${base}`]} />
+        </Treemap>
+      </ResponsiveContainer>
     </div>
   )
 };

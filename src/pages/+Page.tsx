@@ -58,7 +58,7 @@ function App() {
           </label>
         </div>
       </div>
-      <div className='flex justify-center mb-4'>
+      <div className='flex justify-center mb-2'>
         <div className="form-control w-48">
           <label className="label cursor-pointer">
             <span className="label-text">{network === 'xrpl' ? 'XRP' : 'XAH'}</span>
@@ -67,7 +67,7 @@ function App() {
           </label>
         </div>
       </div>
-      <div className="flex">
+      <div className="flex flex-col md:flex-row gap-4">
         <VolumeChart base={base} network={network} yearPrices={yearPrices} dailyPrices={dailyPrices} />
         <LockedChart base={base} network={network} yearPrices={yearPrices} />
       </div>

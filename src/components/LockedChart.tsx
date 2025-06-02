@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import useSWR from 'swr/immutable'
 import { dateFormatter, nativeToken, valueToString } from '../utils';
 import { Stats } from './Stats';
@@ -36,17 +36,19 @@ export const LockedChart = ({ base, network, yearPrices }: { base: string, netwo
   const lockedXRPStr = data.length > 0 ? Math.round(data[data.length - 1].amtXrp).toLocaleString() : '0'
 
   return (
-    <div>
+    <div className='mt-4'>
       <Stats shadow title="Total Value Locked" value={`${lockedAmtStr} ${base} equ.`} desc={`${lockedXRPStr} ${nativeToken(network)} + ${lockedXRPStr} ${nativeToken(network)} equ. tokens`} />
-      <hr className='my-8' />
+      <hr className='my-4' />
       <Stats title="" value={`Total Value Locked (${base})`} desc={`for ${nativeToken(network)} pair`} />
-      <BarChart width={640} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 35 }}>
-        <Bar type="monotone" dataKey="amt" fill="#82ca9d" color="#82ca9d" />
-        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-        <XAxis dataKey="date" />
-        <YAxis dataKey="amt" tickFormatter={(v) => valueToString(v)} />
-        <Tooltip formatter={(value) => [`${value.toLocaleString()}${base}`]} />
-      </BarChart>
+      <ResponsiveContainer width="100%" height={300}>
+        <BarChart data={data} margin={{ top: 5, right: 5, bottom: 5, left: -15 }}>
+          <Bar type="monotone" dataKey="amt" fill="#82ca9d" color="#82ca9d" />
+          <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+          <XAxis dataKey="date" />
+          <YAxis dataKey="amt" tickFormatter={(v) => valueToString(v)} />
+          <Tooltip formatter={(value) => [`${value.toLocaleString()}${base}`]} />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   )
 };

@@ -10,7 +10,7 @@ export const Stats: React.FC<Props> = ({ title, value, desc, shadow = false }) =
     <div className={`stats w-full ${shadow ? 'shadow': ''}`}>
       <div className="stat">
         <div className="stat-title">{title}</div>
-        <div className="stat-value">{value}</div>
+        <div className="stat-value !text-lg md:!text-3xl">{value}</div>
         <div className="stat-desc">{desc}</div>
       </div>
     </div>
