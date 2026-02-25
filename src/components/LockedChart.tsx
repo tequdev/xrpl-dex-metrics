@@ -27,8 +27,9 @@ export const LockedChart = ({ base, network, yearPrices }: { base: string, netwo
       .reverse()
       .map(({ date, amm }) => ({
         date: dateFormatter(date),
-        amt: Math.round((amm.xrp_locked * 2) * (yearPrices[dateFormatter(date)] ?? 1)),
-        amtXrp: Math.round(amm.xrp_locked * (1))
+        // The amm field is missing at 2025/12/26.
+        amt: Math.round((amm?.xrp_locked * 2) * (yearPrices[dateFormatter(date)] ?? 1)),
+        amtXrp: Math.round(amm?.xrp_locked * (1))
       }))
   }, [_data, network, yearPrices])
 
